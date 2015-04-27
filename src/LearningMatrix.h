@@ -22,7 +22,7 @@ public:
 	void ClearLearningMatrix();
 	void ClearIG();
 	void SetInfo(int i, int fi, int g);
-	void Result(int dc);
+	void Result(int dc, int gbest_id);
 	void OutputIG(int index, int **G, std::string name);
 	virtual ~LearningMatrix();
 	int N;
@@ -32,6 +32,8 @@ public:
 struct Temp{
 	vector<int> particle_idx;
 	int component_number;
+	int includeGbest;
+	int gbestID;
 };
 extern vector<Temp> component;
 void OutputN(int index,int g,int dc, int cnt, double gbestFitness, std::string str);

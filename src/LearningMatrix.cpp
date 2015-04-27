@@ -12,6 +12,9 @@
 #include<string>
 #include<queue>
 using namespace std;
+
+vector<Temp> component;
+extern int GAP;
 LearningMatrix::LearningMatrix() {
 	// TODO Auto-generated constructor stub
 
@@ -70,7 +73,7 @@ void LearningMatrix::SetInfo(int i, int fi, int g){
 	if(i != fi){
 		IGW[i][fi]+=1;
 		IGW[fi][i]+=1;
-		if(!(g%200)){
+		if(!(g%GAP)){
 			IG[i][fi]+=1;
 			IG[fi][i]+=1;
 		}
@@ -85,7 +88,7 @@ void LearningMatrix::SetInfo(int i, int fi, int g){
 	}
 }
 
-void LearningMatrix::Result(int dc){//TODO:test
+void LearningMatrix::Result(int dc, int gbest_id){//TODO:test
 //	int dc=2;
 	for(int i=0; i<N; i++){
 		for(int j=0; j<N; j++){
@@ -103,10 +106,17 @@ void LearningMatrix::Result(int dc){//TODO:test
 	}
 	queue<int> q;
 	int cmpnt=1;
-	for(int i=0; i<N; i++){
+//	for(int i=gbest_id; i<gbest_id+N; i++){//from gbest, follow the idx
+	int i =gbest_id;
+	do{
 		if(!visited[i]){
 			Temp temp;
+			temp.includeGbest = 0;
 			q.push(i);
+			if(i == gbest_id){
+				temp.includeGbest = 1;
+				temp.gbestID = gbest_id;
+			}
 			visited[i] = 1;
 			temp.component_number = cmpnt++;
 			while(!q.empty()){
@@ -116,14 +126,23 @@ void LearningMatrix::Result(int dc){//TODO:test
 				for(int j=0; j<N; j++){
 					if(IGsingle[temp.particle_idx.back()][j] && !visited[j]){
 						q.push(j);
+						if(j == gbest_id){
+							temp.includeGbest = 1;
+							temp.gbestID = gbest_id;
+						}
 						visited[j] = 1;
 						temp.component_number = cmpnt++;
 					}
 				}
 			}
-			component.push_back(temp);//cout<<endl;
+			if(temp.includeGbest){
+				component.insert(component.begin(), temp);
+			}else{
+				component.push_back(temp);
+			}
 		}
-	}
+		i = (i+1)%N;
+	}while(i!=gbest_id);
 	delete visited;
 //	La=De-IGu;
 //	cnt=0;
@@ -162,7 +181,7 @@ void LearningMatrix::OutputIG(int index, int **G, string name)//IGF,IGL,IGW
 		cout<<"Can't open file:" << title << endl;
 	}
 }
-vector<Temp> component;
+
 void OutputN(int index,int g,int dc, int cnt, double gbestFitness, string str)//TODO:test
 {
 	ofstream outfile;
@@ -172,10 +191,11 @@ void OutputN(int index,int g,int dc, int cnt, double gbestFitness, string str)//
 	title=stream.str();
 	outfile.open(title.data(),ios::app);//
 	if(outfile.is_open()){
-		outfile<<"g ="<<g<<'\t'<<"component number ="<< component.size()<<"gbestFitness ="<<gbestFitness<<endl;
+		outfile<<"g ="<<g<<'\t'<<"component number ="<< component.size()<<"\tgbestFitness ="<<gbestFitness<<"\tThe gbest is particle:"<< component[0].gbestID << endl;
 //		outfile<<g<<'\t'<<gbestFitness<<'\t'<<cnt<<endl;
+//		outfile << "The gbest is particle:"<< component[0].gbestID <<endl;
 		for(int i=0; i!=component.size(); i++){
-			outfile << component[i].particle_idx.size()<<":";
+			outfile << component[i].particle_idx.size()<<" particle(s) in this component :";
 //			if(component[i].particle_idx.size()>1){
 				for(int j=0; j!=component[i].particle_idx.size(); j++){
 					outfile<< "\t" << component[i].particle_idx[j] ;

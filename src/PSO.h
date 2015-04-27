@@ -20,6 +20,7 @@ public:
 	int **G;
 	double **M;
 	int index;
+	int gbest_id;
 	string name;
 	LearningMatrix LearnMat;
 public:

@@ -107,8 +107,8 @@ int main()
 	cout<<"Now SFCLPSO"<<endl;
 	start=clock();
 //	CLPSO sfclpso(N, DIM, GEN, index, times);
-	SFPSO sfclpso(m0, m, t, DIM, GEN, index, times, "SFPSO");
-//	SFCLPSO sfclpso(m0, m, t, DIM, GEN, index, times);
+//	SFPSO sfclpso(m0, m, t, DIM, GEN, index, times, "SFPSO");
+	SFCLPSO sfclpso(m0, m, t, DIM, GEN, index, times);
 //	PSO *pso = &sfclpso;
 	InitCompoFunc(DIM);
 	for(int index=1; index<=6; index+=5){

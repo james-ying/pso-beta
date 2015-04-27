@@ -17,7 +17,7 @@ CLPSO::CLPSO(int N, int DIM, int GEN, int index, int times):
 	RefreshingGap(7)
 {
 	for(int i=0; i<this->N; i++){
-		p[i].PC=0.05+0.45*(exp((double)10*i/(N-1))-1)/(exp((double)10)-1);
+		p[i].PC=0.05+0.45*(exp((double)10*(N-1-i)/(N-1))-1)/(exp((double)10)-1);//i==>N-1-i
 	}
 	// TODO Auto-generated constructor stub
 }

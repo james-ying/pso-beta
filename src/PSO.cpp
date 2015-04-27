@@ -20,6 +20,7 @@ using namespace std;
 PSO::PSO(){
 
 }
+int GAP=50;
 PSO::PSO(int N, int DIM, int GEN, int index, int times, string name = "PSO"):
 // TODO Set w and c
 		w(0.7298),
@@ -29,6 +30,7 @@ PSO::PSO(int N, int DIM, int GEN, int index, int times, string name = "PSO"):
 	G(new int *[N]),
 	M(new double *[DIM]),
 	index(index),
+	gbest_id(0),
 	name(name),
 	LearnMat(N),
 	N(N),
@@ -124,16 +126,18 @@ void PSO::Initialize(){
 	}
 	memcpy(gbest, p[0].pbest, DIM*sizeof(double));
 	gbestFitness = p[0].pbestFitness;
+	gbest_id = 0;
 	for(int i=1; i<N; i++){
 		if(p[i].pbestFitness<gbestFitness){
 			memcpy(gbest, p[i].pbest, DIM*sizeof(double));
 			gbestFitness = p[i].pbestFitness;
+			gbest_id = i;
 		}
 	}
 }
 
 void PSO::Iterate(int g, int t){
-	if(!(g%200)){
+	if(!(g%GAP)){
 		LearnMat.ClearIG();
 	}
 	UpdateExamplar();
@@ -150,6 +154,7 @@ void PSO::Iterate(int g, int t){
 				if(p[i].pbestFitness<gbestFitness){
 					gbestFitness = p[i].pbestFitness;
 					memcpy(gbest, p[i].pbest, DIM*sizeof(double));
+					gbest_id = i;
 				}
 			}else{
 				p[i].flag = p[i].flag + 1;
@@ -157,16 +162,16 @@ void PSO::Iterate(int g, int t){
 		}
 	}
 
-	if(!(g%200)){
-		OutputG(g, index, t, gbestFitness, GEN, name);
-		LearnMat.Result(2);//TODO:set dc=2 here
-		OutputN(index,g,2,LearnMat.cnt,gbestFitness, name);
+	if(!(g%GAP)){
+//		OutputG(g, index, t, gbestFitness, GEN, name);
+		LearnMat.Result(2, gbest_id);//TODO:set dc=2 here
+		OutputN(index, g, 2, LearnMat.cnt, gbestFitness, name);
 	}
 }
 
 void PSO::UpdateExamplar(){
 	for(int i=0; i<N; i++){
-		for(int j=0;j<p[i].degree;j++){//¸üÐÂÁÚ¾ÓµÄfi
+		for(int j=0;j<p[i].degree;j++){//update neighbor's fi
 			if(p[p[i].link[j]].pbestFitness<p[p[i].fi[0]].pbestFitness){
 				for(int d=0; d<DIM; d++){
 					p[i].fi[d] = p[i].link[j];
