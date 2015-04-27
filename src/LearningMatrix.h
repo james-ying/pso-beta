@@ -15,7 +15,7 @@ public:
 	int **IG;
 	int **IGF; //front 1000 iteration
 	int **IGL; //last 1000 iteration
-	int **IGW; //whole
+	int **IGW;
 	int **IGsingle;
 	LearningMatrix();
 	LearningMatrix(int N);

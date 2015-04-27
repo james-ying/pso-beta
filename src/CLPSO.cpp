@@ -12,6 +12,7 @@ CLPSO::CLPSO() {
 	// TODO Auto-generated constructor stub
 
 }
+
 CLPSO::CLPSO(int N, int DIM, int GEN, int index, int times):
 	PSO(N, DIM, GEN, index, times, "CLPSO"),
 	RefreshingGap(7)

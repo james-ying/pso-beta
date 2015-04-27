@@ -122,7 +122,6 @@ void LearningMatrix::Result(int dc, int gbest_id){//TODO:test
 			while(!q.empty()){
 				temp.particle_idx.push_back(q.front());//int temp = q.front();
 				q.pop();
-//				cout<<temp<<"\t";
 				for(int j=0; j<N; j++){
 					if(IGsingle[temp.particle_idx.back()][j] && !visited[j]){
 						q.push(j);
