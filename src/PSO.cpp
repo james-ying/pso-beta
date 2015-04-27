@@ -217,7 +217,7 @@ void OutputGHead(int index, int GEN, string str)
 			outfile<<endl;
 //		}
 	}else{
-		cout <<"Failed opening the file:" << title << endl;
+		cout <<"Can't open file:" << title << endl;
 	}
 }
 
@@ -244,7 +244,7 @@ void OutputG(int g, int index, int times, double gbestFitness, int GEN, string s
 			outfile<<endl;
 		}
 	}else{
-		cout <<"Failed opening the file:" << title << endl;
+		cout <<"Can't open file:" << title << endl;
 	}
 }
 

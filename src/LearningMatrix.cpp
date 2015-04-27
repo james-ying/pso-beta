@@ -96,7 +96,7 @@ void LearningMatrix::Result(int dc){//TODO:test
 			}
 		}
 	}
-	//BFS
+//BFS
 	int *visited = new int [N];
 	for(int i=0; i<N; i++){
 		visited[i] = 0;
@@ -136,7 +136,7 @@ void LearningMatrix::Result(int dc){//TODO:test
 //	OutputN(index,g,dc,cnt,gbestFitness);
 }
 
-void LearningMatrix::OutputIG(int index, int **G, string name)//IGF,IGL,IGW,La?
+void LearningMatrix::OutputIG(int index, int **G, string name)//IGF,IGL,IGW
 {
 	ofstream outfile;
 	string title1="outputN\\",title2="[",title3="].txt",title,number;
@@ -159,7 +159,7 @@ void LearningMatrix::OutputIG(int index, int **G, string name)//IGF,IGL,IGW,La?
 		}
 		outfile.close();
 	}else{
-		cout<<"不能打开文件！"<<endl;
+		cout<<"Can't open file:" << title << endl;
 	}
 }
 vector<Temp> component;
@@ -186,7 +186,7 @@ void OutputN(int index,int g,int dc, int cnt, double gbestFitness, string str)//
 		outfile<<endl;
 		outfile.close();
 	}else{
-		cout<<"不能打开文件！"<<endl;
+		cout<<"Can't open file:" << title << endl;
 	}
 }
 
