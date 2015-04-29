@@ -26,6 +26,7 @@ LearningMatrix::LearningMatrix(int N):
 	IGL(new int *[N]),
 	IGW(new int *[N]),
 	IGsingle(new int *[N]),
+	CompoDistri(new int [N]),
 	N(N),
 	cnt(0)
 {
@@ -42,6 +43,7 @@ LearningMatrix::LearningMatrix(int N):
 			IGW[i][j] = 0;
 			IGsingle[i][j] = 0;
 		}
+		CompoDistri[i] = 0;
 	}
 	component.clear();//TODO:test
 }
@@ -65,6 +67,7 @@ void LearningMatrix::ClearIG(){
 			IG[i][j]=0;
 			IGsingle[i][j]=0;
 		}
+		CompoDistri[i] = 0;
 	}
 	component.clear();//TODO:test
 }
@@ -143,38 +146,84 @@ void LearningMatrix::Result(int dc, int gbest_id){//TODO:test
 		i = (i+1)%N;
 	}while(i!=gbest_id);
 	delete visited;
-//	La=De-IGu;
-//	cnt=0;
-//	eivals = La.eigenvalues();
-//	for(int i=0; i<N; i++){
-//		if(abs(*eivals.row(i).real().data())<1e-8){
-//			cnt++;
-//		}
-//	}
-//	OutputN(index,g,dc,cnt,gbestFitness);
+
+	for(int i=0; i!=component.size(); i++){
+		CompoDistri[component[i].particle_idx.size()-1]++;
+	}
 }
 
-void LearningMatrix::OutputIG(int index, int **G, string name)//IGF,IGL,IGW
+void LearningMatrix::OutputIG(int index, string name)//IGF,IGL,IGW
 {
 	ofstream outfile;
-	string title1="outputN\\",title2="[",title3="].txt",title,number;
-	title=title1;
+	string title;
 	stringstream stream;
-	stream<<index;
-	number=stream.str();
-	title.append(name);
-	title.append(title2);
-	title.append(number);
-	title.append(title3);
-	outfile.open(title.data());
+	stream<<"outputN\\"<<name<<"-component["<<index<<"]-IGF"<<".txt";
+	title=stream.str();
+	outfile.open(title.data(),ios::app);//
 	if(outfile.is_open()){
-		outfile<<"IG:"<<endl;
 		for(int i=0;i<N;i++){
 			for(int j=0;j<N;j++){
 //				outfile<<La(i,j)<<'\t';
+				outfile<<IGF[i][j]<<'\t';
+
 			}
 			outfile<<endl;
 		}
+		outfile.close();
+	}else{
+		cout<<"Can't open file:" << title << endl;
+	}
+
+	stream.str("");
+	stream<<"outputN\\"<<name<<"-component["<<index<<"]-IGL"<<".txt";
+	title=stream.str();
+	outfile.open(title.data(),ios::app);//
+	if(outfile.is_open()){
+		for(int i=0;i<N;i++){
+			for(int j=0;j<N;j++){
+//				outfile<<La(i,j)<<'\t';
+				outfile<<IGL[i][j]<<'\t';
+
+			}
+			outfile<<endl;
+		}
+		outfile.close();
+	}else{
+		cout<<"Can't open file:" << title << endl;
+	}
+
+	stream.str("");
+	stream<<"outputN\\"<<name<<"-component["<<index<<"]-IGW"<<".txt";
+	title=stream.str();
+	outfile.open(title.data(),ios::app);//
+	if(outfile.is_open()){
+		for(int i=0;i<N;i++){
+			for(int j=0;j<N;j++){
+//				outfile<<La(i,j)<<'\t';
+				outfile<<IGW[i][j]<<'\t';
+
+			}
+			outfile<<endl;
+		}
+		outfile.close();
+	}else{
+		cout<<"Can't open file:" << title << endl;
+	}
+}
+
+void LearningMatrix::OutputDistribution(int index, string str)//TODO:test
+{
+	ofstream outfile;
+	string title;
+	stringstream stream;
+	stream<<"outputN\\"<<str<<"-component distribution["<<index<<"].txt";
+	title=stream.str();
+	outfile.open(title.data(),ios::app);//
+	if(outfile.is_open()){
+		for(int i=0; i!=N; i++){
+			outfile << CompoDistri[i] << "\t" ;
+		}
+		outfile<<endl;
 		outfile.close();
 	}else{
 		cout<<"Can't open file:" << title << endl;
@@ -203,6 +252,34 @@ void OutputN(int index,int g,int dc, int cnt, double gbestFitness, string str)//
 			outfile << "\t;"<<endl;
 		}
 		outfile<<endl;
+		outfile.close();
+	}else{
+		cout<<"Can't open file:" << title << endl;
+	}
+}
+void OutputComponentStatistic(int index,int g,int dc, int cnt, double gbestFitness, string str)//TODO:test
+{
+	ofstream outfile;
+	string title;
+	stringstream stream;
+	stream<<"outputN\\"<<str<<"-component["<<index<<"]-dc="<<dc<<".txt";
+	title=stream.str();
+	outfile.open(title.data(),ios::app);//
+	if(outfile.is_open()){
+//	component number, the size of pice include gbest, the size of the gaint pice, gbest is in the gaint pice		// large-degree particles' number
+		int gaintIdx=0, isInGaint = 0;
+		for(int i=0; i!=component.size(); i++){
+			 if(component[i].particle_idx.size()>component[gaintIdx].particle_idx.size()){
+				 gaintIdx = i;
+			 }
+		}
+		if(component[gaintIdx].includeGbest){
+			isInGaint = 1;
+		}
+		outfile << component.size() << "\t"
+				<< component[0].particle_idx.size() << "\t"
+				<< component[gaintIdx].particle_idx.size()<< "\t"
+				<< isInGaint <<endl;
 		outfile.close();
 	}else{
 		cout<<"Can't open file:" << title << endl;

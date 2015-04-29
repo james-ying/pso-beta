@@ -17,13 +17,15 @@ public:
 	int **IGL; //last 1000 iteration
 	int **IGW;
 	int **IGsingle;
+	int *CompoDistri;
 	LearningMatrix();
 	LearningMatrix(int N);
 	void ClearLearningMatrix();
 	void ClearIG();
 	void SetInfo(int i, int fi, int g);
 	void Result(int dc, int gbest_id);
-	void OutputIG(int index, int **G, std::string name);
+	void OutputIG(int index, std::string name);
+	void OutputDistribution(int index, string str);
 	virtual ~LearningMatrix();
 	int N;
 	int cnt;//Á¬Í¨Æ¬Êý
@@ -37,5 +39,6 @@ struct Temp{
 };
 extern vector<Temp> component;
 void OutputN(int index,int g,int dc, int cnt, double gbestFitness, std::string str);
+void OutputComponentStatistic(int index,int g,int dc, int cnt, double gbestFitness, string str);
 
 #endif /* LEARNINGMATRIX_H_ */

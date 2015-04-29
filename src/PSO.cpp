@@ -20,7 +20,7 @@ using namespace std;
 PSO::PSO(){
 
 }
-int GAP=50;
+int GAP=1;
 PSO::PSO(int N, int DIM, int GEN, int index, int times, string name = "PSO"):
 // TODO Set w and c
 		w(0.7298),
@@ -165,7 +165,9 @@ void PSO::Iterate(int g, int t){
 	if(!(g%GAP)){
 //		OutputG(g, index, t, gbestFitness, GEN, name);
 		LearnMat.Result(2, gbest_id);//TODO:set dc=2 here
-		OutputN(index, g, 2, LearnMat.cnt, gbestFitness, name);
+		LearnMat.OutputDistribution(index, name);
+//		OutputN(index, g, 2, LearnMat.cnt, gbestFitness, name);
+		OutputComponentStatistic(index, g, 2, LearnMat.cnt, gbestFitness, name);
 	}
 }
 

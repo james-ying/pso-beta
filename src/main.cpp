@@ -106,9 +106,10 @@ int main()
 
 	cout<<"Now SFCLPSO"<<endl;
 	start=clock();
+	LPSO sfclpso(N, DIM, GEN, index, times);
 //	CLPSO sfclpso(N, DIM, GEN, index, times);
 //	SFPSO sfclpso(m0, m, t, DIM, GEN, index, times, "SFPSO");
-	SFCLPSO sfclpso(m0, m, t, DIM, GEN, index, times);
+//	SFCLPSO sfclpso(m0, m, t, DIM, GEN, index, times);
 //	PSO *pso = &sfclpso;
 	InitCompoFunc(DIM);
 	for(int index=1; index<=6; index+=5){
@@ -117,6 +118,7 @@ int main()
 		sfclpso.Run();
 //		pso->index=index;
 //		pso->Run();
+//		sfclpso.LearnMat.OutputIG(index, "CLPSO");
 		stop=clock();
 		int time=(stop-start)/CLOCKS_PER_SEC;
 		cout<<"f("<<index<<") use "<<(time/60)<<"min "<<time%60<<"s"<<endl;
