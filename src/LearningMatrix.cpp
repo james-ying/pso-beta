@@ -20,30 +20,43 @@ LearningMatrix::LearningMatrix() {
 
 }
 
-LearningMatrix::LearningMatrix(int N):
+LearningMatrix::LearningMatrix(int N, int GEN):
 	IG(new int *[N]),
 	IGF(new int *[N]),
+	IGM(new int *[N]),
 	IGL(new int *[N]),
 	IGW(new int *[N]),
 	IGsingle(new int *[N]),
-	CompoDistri(new int [N]),
+	CompoDistri(new int * [GEN+1]),
+	CompoDistriGbest(new int * [GEN+1]),
 	N(N),
-	cnt(0)
+	cnt(0),
+	GEN(GEN)
 {
 	for(int i=0; i<N; i++){
 		IG[i] = new int [N];
 		IGF[i] = new int [N];
+		IGM[i] = new int [N];
 		IGL[i] = new int [N];
 		IGW[i] = new int [N];
 		IGsingle[i] = new int [N];
 		for(int j=0; j<N; j++){
 			IG[i][j] = 0;
 			IGF[i][j] = 0;
+			IGM[i][j] = 0;
 			IGL[i][j] = 0;
 			IGW[i][j] = 0;
 			IGsingle[i][j] = 0;
 		}
 		CompoDistri[i] = 0;
+	}
+	for(int g=0; g<=GEN; g++){
+		CompoDistri[g] = new int [N];
+		CompoDistriGbest[g] = new int [N];
+		for(int i=0; i<N; i++){
+			CompoDistri[g][i] = 0;
+			CompoDistriGbest[g][i] = 0;
+		}
 	}
 	component.clear();//TODO:test
 }
@@ -53,9 +66,16 @@ void LearningMatrix::ClearLearningMatrix(){
 		for(int j=0; j<N; j++){
 			IG[i][j] = 0;
 			IGF[i][j] = 0;
+			IGM[i][j] = 0;
 			IGL[i][j] = 0;
 			IGW[i][j] = 0;
 			IGsingle[i][j]=0;
+		}
+	}
+	for(int g=0; g<=GEN; g++){
+		for(int i=0; i<N; i++){
+			CompoDistri[g][i] = 0;
+			CompoDistriGbest[g][i] = 0;
 		}
 	}
 	component.clear();//TODO:test
@@ -67,7 +87,7 @@ void LearningMatrix::ClearIG(){
 			IG[i][j]=0;
 			IGsingle[i][j]=0;
 		}
-		CompoDistri[i] = 0;
+//		CompoDistri[i] = 0;
 	}
 	component.clear();//TODO:test
 }
@@ -75,23 +95,27 @@ void LearningMatrix::ClearIG(){
 void LearningMatrix::SetInfo(int i, int fi, int g){
 	if(i != fi){
 		IGW[i][fi]+=1;
-		IGW[fi][i]+=1;
+//		IGW[fi][i]+=1;
 		if(!(g%GAP)){
 			IG[i][fi]+=1;
-			IG[fi][i]+=1;
+//			IG[fi][i]+=1;
 		}
-		if(g<1000){
+		if(g<500){
 			IGF[i][fi]+=1;
-			IGF[fi][i]+=1;
+//			IGF[fi][i]+=1;
 		}
-		if(g>4000){
+		if(g>1500 && g<2000){
+			IGM[i][fi]+=1;
+//			IGM[fi][i]+=1;
+		}
+		if(g>4500){
 			IGL[i][fi]+=1;
-			IGL[fi][i]+=1;
+//			IGL[fi][i]+=1;
 		}
 	}
 }
 
-void LearningMatrix::Result(int dc, int gbest_id){//TODO:test
+void LearningMatrix::Result(int dc, int g, int gbest_id){//TODO:test
 //	int dc=2;
 	for(int i=0; i<N; i++){
 		for(int j=0; j<N; j++){
@@ -137,7 +161,7 @@ void LearningMatrix::Result(int dc, int gbest_id){//TODO:test
 					}
 				}
 			}
-			if(temp.includeGbest){
+			if(temp.includeGbest){//包含gbest的连通片放在最前面一个
 				component.insert(component.begin(), temp);
 			}else{
 				component.push_back(temp);
@@ -148,8 +172,10 @@ void LearningMatrix::Result(int dc, int gbest_id){//TODO:test
 	delete visited;
 
 	for(int i=0; i!=component.size(); i++){
-		CompoDistri[component[i].particle_idx.size()-1]++;
+		CompoDistri[g][component[i].particle_idx.size()-1]++;
 	}
+
+	CompoDistriGbest[g][component[0].particle_idx.size()-1]++;
 }
 
 void LearningMatrix::OutputIG(int index, string name)//IGF,IGL,IGW
@@ -165,6 +191,23 @@ void LearningMatrix::OutputIG(int index, string name)//IGF,IGL,IGW
 			for(int j=0;j<N;j++){
 //				outfile<<La(i,j)<<'\t';
 				outfile<<IGF[i][j]<<'\t';
+
+			}
+			outfile<<endl;
+		}
+		outfile.close();
+	}else{
+		cout<<"Can't open file:" << title << endl;
+	}
+	stream.str("");
+	stream<<"outputN\\"<<name<<"-component["<<index<<"]-IGM"<<".txt";
+	title=stream.str();
+	outfile.open(title.data(),ios::app);//
+	if(outfile.is_open()){
+		for(int i=0;i<N;i++){
+			for(int j=0;j<N;j++){
+//				outfile<<La(i,j)<<'\t';
+				outfile<<IGM[i][j]<<'\t';
 
 			}
 			outfile<<endl;
@@ -211,7 +254,7 @@ void LearningMatrix::OutputIG(int index, string name)//IGF,IGL,IGW
 	}
 }
 
-void LearningMatrix::OutputDistribution(int index, string str)//TODO:test
+void LearningMatrix::OutputDistribution(int index, int g, string str)
 {
 	ofstream outfile;
 	string title;
@@ -221,7 +264,27 @@ void LearningMatrix::OutputDistribution(int index, string str)//TODO:test
 	outfile.open(title.data(),ios::app);//
 	if(outfile.is_open()){
 		for(int i=0; i!=N; i++){
-			outfile << CompoDistri[i] << "\t" ;
+			outfile << CompoDistri[g][i] << "\t" ;
+		}
+		outfile<<endl;
+		outfile.close();
+	}else{
+		cout<<"Can't open file:" << title << endl;
+	}
+}
+
+void LearningMatrix::OutputDistributionGbest(int index, int g, string str)
+{
+	ofstream outfile;
+	string title;
+	stringstream stream;
+	stream<<"outputN\\"<<str<<"-component distribution gbest["<<index<<"].txt";
+	title=stream.str();
+	outfile.open(title.data(),ios::app);//
+	if(outfile.is_open()){
+		outfile << component[0].gbestID <<'\t';
+		for(int i=0; i!=N; i++){
+			outfile << CompoDistriGbest[g][i] << "\t" ;
 		}
 		outfile<<endl;
 		outfile.close();
@@ -291,6 +354,7 @@ LearningMatrix::~LearningMatrix() {
 	for(int i=0; i<N; i++){
 		delete IG[i];
 		delete IGF[i];
+		delete IGM[i];
 		delete IGL[i];
 		delete IGW[i];
 		delete IGsingle[i];

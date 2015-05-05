@@ -20,7 +20,7 @@ using namespace std;
 PSO::PSO(){
 
 }
-int GAP=1;
+int GAP=200;
 PSO::PSO(int N, int DIM, int GEN, int index, int times, string name = "PSO"):
 // TODO Set w and c
 		w(0.7298),
@@ -32,7 +32,7 @@ PSO::PSO(int N, int DIM, int GEN, int index, int times, string name = "PSO"):
 	index(index),
 	gbest_id(0),
 	name(name),
-	LearnMat(N),
+	LearnMat(N, GEN),
 	N(N),
 	DIM(DIM),
 	GEN(GEN),
@@ -51,6 +51,7 @@ PSO::PSO(int N, int DIM, int GEN, int index, int times, string name = "PSO"):
 }
 
 void PSO::Run(){
+	LearnMat.ClearLearningMatrix();
 	OutputGHead(index, GEN, name);
 	InitNeighbor();
 	for(int t=0; t<times; t++){
@@ -164,10 +165,14 @@ void PSO::Iterate(int g, int t){
 
 	if(!(g%GAP)){
 //		OutputG(g, index, t, gbestFitness, GEN, name);
-		LearnMat.Result(2, gbest_id);//TODO:set dc=2 here
-		LearnMat.OutputDistribution(index, name);
+		LearnMat.Result(2, g, gbest_id);//TODO:set dc=2 here
+//		if(t == times-1){
+//			LearnMat.OutputDistribution(index, g, name);
+//			LearnMat.OutputDistributionGbest(index, g, name);
+//		}
 //		OutputN(index, g, 2, LearnMat.cnt, gbestFitness, name);
-		OutputComponentStatistic(index, g, 2, LearnMat.cnt, gbestFitness, name);
+//		OutputComponentStatistic(index, g, 2, LearnMat.cnt, gbestFitness, name);
+
 	}
 }
 

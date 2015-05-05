@@ -18,6 +18,7 @@ SFCLPSO::SFCLPSO(int m0, int m, int t, int DIM, int GEN, int index, int times) :
 }
 
 void SFCLPSO::Run() {
+	LearnMat.ClearLearningMatrix();
 	OutputGHead(index, GEN, name);
 	for (int t = 0; t < times; t++) {
 		InitNeighbor();
@@ -25,12 +26,13 @@ void SFCLPSO::Run() {
 			p[i].PC = 1 / (1 + pow(M_E, (2 * m - p[i].degree)));
 		}
 //		for (int tnet = 0; tnet < 5; tnet++) {
+			LearnMat.ClearIG();
 			Initialize();
 			for (int i = 0; i < N; i++) {
 				Refresh(i);
 			}
 			for (int g = 0; g <= GEN; g++) {
-				w = 0.9 - 0.5 * (g + 1) / GEN;
+				w = 0.9 - 0.5 * (g + 1) / GEN;//TODO:change with GEN
 				for (int i = 0; i < N; i++) {
 					p[i].isUpdate = true;
 				}

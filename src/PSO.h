@@ -13,14 +13,14 @@
 using namespace std;
 class PSO {
 public:
-	double w;
+	double w; //惯性权重
 	double c;
 	double *gbest;
 	double gbestFitness;
-	int **G;
-	double **M;
-	int index;
-	int gbest_id;
+	int **G; //拓扑结构
+	double **M; //rotate Matrix for function
+	int index; //函数序号
+	int gbest_id;//gbest例子序号
 	string name;
 	LearningMatrix LearnMat;
 public:

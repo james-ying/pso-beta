@@ -16,6 +16,7 @@ FIPSO::FIPSO(int N, int DIM, int GEN, int index, int times):
 //	r(new double *[N]),
 	pk(new double *[N])
 {
+	name = "FIPSO";
 	for(int i=0; i<N; i++){
 //		r[i] = new double[DIM];
 		pk[i] = new double[DIM];

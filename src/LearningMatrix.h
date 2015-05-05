@@ -13,22 +13,26 @@ using namespace std;
 class LearningMatrix {
 public:
 	int **IG;
-	int **IGF; //front 1000 iteration
-	int **IGL; //last 1000 iteration
-	int **IGW;
-	int **IGsingle;
-	int *CompoDistri;
+	int **IGF; //front 500 iteration
+	int **IGM; //middle 500 iteration
+	int **IGL; //last 500 iteration
+	int **IGW; //whole iteration
+	int **IGsingle;//信息传递网络
+	int **CompoDistri;//CompoDisti[g][i]第g代中粒子数为i的连通片的数量
+	int **CompoDistriGbest;
 	LearningMatrix();
-	LearningMatrix(int N);
+	LearningMatrix(int N, int GEN);
 	void ClearLearningMatrix();
 	void ClearIG();
 	void SetInfo(int i, int fi, int g);
-	void Result(int dc, int gbest_id);
+	void Result(int dc, int g, int gbest_id);
 	void OutputIG(int index, std::string name);
-	void OutputDistribution(int index, string str);
+	void OutputDistribution(int index, int g, string str);
+	void OutputDistributionGbest(int index, int g, string str);
 	virtual ~LearningMatrix();
 	int N;
 	int cnt;//连通片数
+	int GEN;
 };
 //TODO:test
 struct Temp{

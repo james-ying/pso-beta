@@ -24,9 +24,11 @@ CLPSO::CLPSO(int N, int DIM, int GEN, int index, int times):
 }
 
 void CLPSO::Run(){
+	LearnMat.ClearLearningMatrix();
 	OutputGHead(index, GEN, name);
 	InitNeighbor();
 	for(int t=0; t<times; t++){
+		LearnMat.ClearIG();
 		Initialize();
 		for(int i=0; i<N; i++){
 			Refresh(i);
