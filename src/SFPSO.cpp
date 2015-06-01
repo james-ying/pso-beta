@@ -106,7 +106,7 @@ void SFPSO::Run(){
 	OutputGHead(index, GEN, name);
 	for(int t=0; t<times; t++){
 		InitNeighbor();
-//		for(int tnet=0; tnet<5; tnet++){
+//		for(int tnet=0; tnet<50; tnet++){
 			LearnMat.ClearIG();
 			Initialize();
 			for(int g=0; g<=GEN; g++){

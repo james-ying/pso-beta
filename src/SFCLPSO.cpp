@@ -25,7 +25,7 @@ void SFCLPSO::Run() {
 		for (int i = 0; i < N; i++) {
 			p[i].PC = 1 / (1 + pow(M_E, (2 * m - p[i].degree)));
 		}
-//		for (int tnet = 0; tnet < 5; tnet++) {
+		for (int tnet = 0; tnet < 1; tnet++) {
 			LearnMat.ClearIG();
 			Initialize();
 			for (int i = 0; i < N; i++) {
@@ -38,7 +38,7 @@ void SFCLPSO::Run() {
 				}
 				Iterate(g, t);
 			}
-//		}
+		}
 	}
 }
 

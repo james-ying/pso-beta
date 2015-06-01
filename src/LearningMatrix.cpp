@@ -93,7 +93,7 @@ void LearningMatrix::ClearIG(){
 }
 
 void LearningMatrix::SetInfo(int i, int fi, int g){
-	if(i != fi){
+//	if(i != fi){
 		IGW[i][fi]+=1;
 //		IGW[fi][i]+=1;
 		if(!(g%GAP)){
@@ -112,7 +112,7 @@ void LearningMatrix::SetInfo(int i, int fi, int g){
 			IGL[i][fi]+=1;
 //			IGL[fi][i]+=1;
 		}
-	}
+//	}
 }
 
 void LearningMatrix::Result(int dc, int g, int gbest_id){//TODO:test

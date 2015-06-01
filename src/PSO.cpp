@@ -164,8 +164,8 @@ void PSO::Iterate(int g, int t){
 	}
 
 	if(!(g%GAP)){
-//		OutputG(g, index, t, gbestFitness, GEN, name);
-		LearnMat.Result(2, g, gbest_id);//TODO:set dc=2 here
+		OutputG(g, index, t, gbestFitness, GEN, name);
+//		LearnMat.Result(2, g, gbest_id);//TODO:set dc=2 here
 //		if(t == times-1){
 //			LearnMat.OutputDistribution(index, g, name);
 //			LearnMat.OutputDistributionGbest(index, g, name);

@@ -34,7 +34,7 @@ int main()
 	int m0, m, t;
 
 	m0=4; m=4; t=36;
-	N=m0+t; DIM=30; GEN=5000; times=1;
+	N=m0+t; DIM=30; GEN=8000; times=50;
 	clock_t start,stop;
 	int time;
 //==================================
@@ -122,7 +122,7 @@ int main()
 ////	start=clock();
 //	GPSO gpso(N, DIM, GEN, index, times);
 //	InitCompoFunc(DIM);
-//	for(int index=12; index<=14; index++){
+//	for(int index=6; index<=7; index++){
 //		start=clock();
 //		gpso.index=index;
 //		gpso.Run();
@@ -130,10 +130,10 @@ int main()
 //		time=(stop-start)/CLOCKS_PER_SEC;
 //		cout<<"f("<<index<<") use "<<(time/60)<<"min "<<time%60<<"s"<<endl;
 //	}
-////	stop=clock();
-////	time=(stop-start)/CLOCKS_PER_SEC;
-////	std::cout<<"Total used "<<(time/60)<<"min "<<time%60<<"s"<<endl;
-////
+//	stop=clock();
+//	time=(stop-start)/CLOCKS_PER_SEC;
+//	std::cout<<"Total used "<<(time/60)<<"min "<<time%60<<"s"<<endl;
+//
 //	cout<<"Now LPSO"<<endl;
 //	LPSO lpso(N, DIM, GEN, index, times);
 //	InitCompoFunc(DIM);
@@ -145,19 +145,19 @@ int main()
 //		time=(stop-start)/CLOCKS_PER_SEC;
 //		cout<<"f("<<index<<") use "<<(time/60)<<"min "<<time%60<<"s"<<endl;
 //	}
-////
-////	cout<<"Now FIPSO"<<endl;
-////	FIPSO fipso(N, DIM, GEN, index, times);
-////	InitCompoFunc(DIM);
-////	for(int index=12; index<=14; index++){
-////		start=clock();
-////		fipso.index = index;
-////		fipso.Run();
-////		stop=clock();
-////		time=(stop-start)/CLOCKS_PER_SEC;
-////		cout<<"f("<<index<<") use "<<(time/60)<<"min "<<time%60<<"s"<<endl;
-////	}
-////
+
+//	cout<<"Now FIPSO"<<endl;
+//	FIPSO fipso(N, DIM, GEN, index, times);
+//	InitCompoFunc(DIM);
+//	for(int index=14; index<=14; index++){
+//		start=clock();
+//		fipso.index = index;
+//		fipso.Run();
+//		stop=clock();
+//		time=(stop-start)/CLOCKS_PER_SEC;
+//		cout<<"f("<<index<<") use "<<(time/60)<<"min "<<time%60<<"s"<<endl;
+//	}
+
 //	cout<<"Now SFPSO"<<endl;
 //	start=clock();
 //	SFPSO sfpso(m0, m, t, DIM, GEN, index, times, "SFPSO");
@@ -184,21 +184,21 @@ int main()
 //		cout<<"f("<<index<<") use "<<(time/60)<<"min "<<time%60<<"s"<<endl;
 //	}
 //
-//	cout<<"Now SFCLPSO"<<endl;
-//	start=clock();
-//	SFCLPSO sfclpso(m0, m, t, DIM, GEN, index, times);
-////	PSO *pso = &sfclpso;
-//	InitCompoFunc(DIM);
-//	for(int index=17; index<=17; index++){
-//		start=clock();
-//		sfclpso.index = index;
-//		sfclpso.Run();
-////		pso->index=index;
-////		pso->Run();
-////		sfclpso.LearnMat.OutputIG(index, "CLPSO");
-//		stop=clock();
-//		int time=(stop-start)/CLOCKS_PER_SEC;
-//		cout<<"f("<<index<<") use "<<(time/60)<<"min "<<time%60<<"s"<<endl;
-//	}
+	cout<<"Now SFCLPSO"<<endl;
+	start=clock();
+	SFCLPSO sfclpso(m0, m, t, DIM, GEN, index, times);
+//	PSO *pso = &sfclpso;
+	InitCompoFunc(DIM);
+	for(int index=12; index<=14; index++){
+		start=clock();
+		sfclpso.index = index;
+		sfclpso.Run();
+//		pso->index=index;
+//		pso->Run();
+//		sfclpso.LearnMat.OutputIG(index, "CLPSO");
+		stop=clock();
+		int time=(stop-start)/CLOCKS_PER_SEC;
+		cout<<"f("<<index<<") use "<<(time/60)<<"min "<<time%60<<"s"<<endl;
+	}
 	return 0;
 }
